@@ -12,10 +12,13 @@ describe('cli_reporter', () => {
       expect(reporter.ui.width).to.equal(process.stdout.columns);
       expect(reporter.ui.wrap).to.equal(true);
       expect(reporter.issueTitleWidth).to.equal(36);
-      expect(reporter.styles['Deprecation']).to.be.a('function');
-      expect(reporter.styles['Possible Bug']).to.be.a('function');
-      expect(reporter.styles['Clarity']).to.be.a('function');
-      expect(reporter.styles['Optimization']).to.be.a('function');
+      expect(reporter.categoryStyles['Deprecation']).to.be.a('function');
+      expect(reporter.categoryStyles['Possible Bug']).to.be.a('function');
+      expect(reporter.categoryStyles['Clarity']).to.be.a('function');
+      expect(reporter.categoryStyles['Optimization']).to.be.a('function');
+      expect(reporter.severityStyles['Error']).to.be.a('function');
+      expect(reporter.severityStyles['Warning']).to.be.a('function');
+      expect(reporter.severityStyles['Info']).to.be.a('function');
       expect(reporter.fileReports).to.be.empty;
     });
 

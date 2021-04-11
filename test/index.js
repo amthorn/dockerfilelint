@@ -165,6 +165,7 @@ describe("index", function(){
       let expected = [{
         title: 'Avoid Curl Bashing',
         line: 3,
+        severity: 'Info',
         rule: 'avoid_curl_bashing'
       }]
       let result = dockerfilelint.run('./test/examples', fs.readFileSync('./test/examples/Dockerfile.custom-ruleset', 'UTF-8'), './test/ruleset.js');
