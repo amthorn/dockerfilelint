@@ -11,7 +11,7 @@ describe('cli_reporter', () => {
       let reporter = new CliReporter();
       expect(reporter.ui.width).to.equal(process.stdout.columns);
       expect(reporter.ui.wrap).to.equal(true);
-      expect(reporter.issueTitleWidth).to.equal(40);
+      expect(reporter.issueTitleWidth).to.equal(36);
       expect(reporter.styles['Deprecation']).to.be.a('function');
       expect(reporter.styles['Possible Bug']).to.be.a('function');
       expect(reporter.styles['Clarity']).to.be.a('function');
@@ -30,7 +30,7 @@ describe('cli_reporter', () => {
       let reporter = new CliReporter({ width: 'hello' });
       expect(reporter.ui.width).to.equal(process.stdout.columns);
       expect(reporter.ui.wrap).to.equal(true);
-      expect(reporter.issueTitleWidth).to.equal(40);
+      expect(reporter.issueTitleWidth).to.equal(36);
     });
   });
 
@@ -112,18 +112,18 @@ describe('cli_reporter', () => {
         'Issues: 4',
         '',
         'Line 5: ' + chalk.magenta('FROM ubuntu'),
-        'Issue  Category      Title                                   Description',
-        '    ' + chalk.cyan('1') + '  ' + chalk.cyan.inverse('Clarity') + '       ' + chalk.cyan('Base Image Missing Tag') + '                  ' + chalk.gray('Base images should specify a tag to use.'),
+        'Issue  Category      Title                               Description',
+        '    ' + chalk.cyan('1') + '  ' + chalk.cyan.inverse('Clarity') + '       ' + chalk.cyan('Base Image Missing Tag') + '              ' + chalk.gray('Base images should specify a tag to use.'),
         '',
         'Line 6: ' + chalk.magenta('FROM ubuntu:latest'),
-        'Issue  Category      Title                                   Description',
-        '    ' + chalk.yellow('2') + '  ' + chalk.yellow.inverse('Possible Bug') + '  ' + chalk.yellow('First Command Must Be FROM') + '              ' + chalk.gray('The first instruction in a Dockerfile must specify the base image using a FROM command.  Additionally, FROM cannot appear'),
-        '                                                             ' + chalk.gray('later in a Dockerfile.'),
-        '    ' + chalk.cyan('3') + '  ' + chalk.cyan.inverse('Clarity') + '       ' + chalk.cyan('Base Image Latest Tag') + '                   ' + chalk.gray('Base images should not use the latest tag.'),
+        'Issue  Category      Title                               Description',
+        '    ' + chalk.yellow('2') + '  ' + chalk.yellow.inverse('Possible Bug') + '  ' + chalk.yellow('First Command Must Be FROM') + '          ' + chalk.gray('The first instruction in a Dockerfile must specify the base image using a FROM command.  Additionally, FROM'),
+        '                                                         ' + chalk.gray('cannot appear later in a Dockerfile.'),
+        '    ' + chalk.cyan('3') + '  ' + chalk.cyan.inverse('Clarity') + '       ' + chalk.cyan('Base Image Latest Tag') + '               ' + chalk.gray('Base images should not use the latest tag.'),
         '',
         'Line 25: ' + chalk.magenta('EXPOSE 80:80'),
-        'Issue  Category      Title                                   Description',
-        '    ' + chalk.red('4') + '  ' + chalk.red.inverse('Deprecation') + '   ' + chalk.red('Expose Only Container Port') + '              ' + chalk.gray('Using `EXPOSE` to specify a host port is not allowed.'),
+        'Issue  Category      Title                               Description',
+        '    ' + chalk.red('4') + '  ' + chalk.red.inverse('Deprecation') + '   ' + chalk.red('Expose Only Container Port') + '          ' + chalk.gray('Using `EXPOSE` to specify a host port is not allowed.'),
         ''
       ]);
     });
@@ -147,8 +147,8 @@ describe('cli_reporter', () => {
         'Issues: 1',
         '',
         'Line 5: ' + chalk.magenta('RUN apt-get update && \\'),
-        'Issue  Category      Title                                   Description',
-        '    ' + chalk.cyan('1') + '  ' + chalk.cyan.inverse('Hello') + '         ' + chalk.cyan('Hello World!') + '                            ' + chalk.gray('This is a test.'),
+        'Issue  Category      Title                               Description',
+        '    ' + chalk.cyan('1') + '  ' + chalk.cyan.inverse('Hello') + '         ' + chalk.cyan('Hello World!') + '                        ' + chalk.gray('This is a test.'),
         ''
       ]);
     });
