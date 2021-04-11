@@ -102,5 +102,5 @@ function processContent (configFilePath, name, content, customRulesetPath) {
 function report () {
   var report = reporter.buildReport();
   console.log(report.toString());
-  process.exit(report.totalIssues);
+  process.exit(report.error ? report.totalIssues : 0);
 }
