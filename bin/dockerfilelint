@@ -95,7 +95,11 @@ argv._.forEach((fileName) => {
 report();
 
 function processContent (configFilePath, name, content, customRulesetPath) {
-  const items = dockerfilelint.run(configFilePath, content, customRulesetPath);
+  const items = dockerfilelint.run({
+    configFilePath: configFilePath,
+    content: content,
+    customRulesetPath: customRulesetPath
+  });
   reporter.addFile(name, content, items, customRulesetPath);
 }
 
