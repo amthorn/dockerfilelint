@@ -1,11 +1,16 @@
 #!/usr/bin/env node
-
-var process = require('process');
-var fs = require('fs');
-var os = require("os");
-var path = require('path');
+import process from 'process';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import yargs from 'yargs';
+import { run } from '../lib/index.js';
+import chalk from 'chalk';
+import json_reporter from '../lib/reporter/json_reporter.js';
+import cli_reporter from '../lib/reporter/cli_reporter.js';
 var usage = 'Usage: dockerfilelint [files | content..] [options]';
-var argv = require('yargs')
+
+let argv = yargs
   .usage(usage)
   .option('o', {
     alias: 'output',
@@ -41,10 +46,8 @@ var argv = require('yargs')
   })
   .argv;
 
-var dockerfilelint = require('../lib/index');
-var chalk = require('chalk');
 
-var Reporter = argv.output === 'json' ? require('../lib/reporter/json_reporter') : require('../lib/reporter/cli_reporter');
+var Reporter = argv.output === 'json' ? json_reporter : cli_reporter;
 var reporter = new Reporter();
 
 var fileContent, configFilePath, customRuleset;
@@ -58,7 +61,7 @@ if (argv._.length === 0 || argv._[0] === '-') {
   process.stdin.on('data', function (chunk) {
     fileContent += chunk;
   });
-  return process.stdin.on('end', function () {
+  process.stdin.on('end', function () {
     if (fileContent.length === 0) {
       console.error(usage);
       return process.exit(1);
@@ -88,19 +91,29 @@ argv._.forEach((fileName) => {
     console.error(chalk.red('Invalid input:'), fileName);
     return process.exit(1);
   }
-
-  processContent(configFilePath, fileName, fileContent, argv.ruleset);
+  let customRules = {};
+  if (argv.ruleset){
+    const absPath = path.join(process.cwd(), argv.ruleset);
+    import(absPath).then((customRules) => {
+      execute(configFilePath, fileName, fileContent, customRules.rules);
+    })
+  }else{
+    execute(configFilePath, fileName, fileContent, customRules);
+  }
 });
 
-report();
+function execute(configFilePath, fileName, fileContent, customRules){
+  processContent(configFilePath, fileName, fileContent, customRules)
+  report();
+}
 
-function processContent (configFilePath, name, content, customRulesetPath) {
-  const items = dockerfilelint.run({
-    configFilePath: configFilePath,
+function processContent (configFilePath2, name, content, customRules) {
+  let items = run({
+    configFilePath2: configFilePath2,
     content: content,
-    customRulesetPath: customRulesetPath
-  });
-  reporter.addFile(name, content, items, customRulesetPath);
+    ruleContents: customRules
+  })
+  reporter.addFile(name, content, items, customRules);
 }
 
 function report () {

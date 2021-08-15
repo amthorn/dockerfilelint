@@ -3,5 +3,3 @@ extends:
 env:
   node: true
   mocha: true
-ecmaFeatures:
-  templateStrings: true
